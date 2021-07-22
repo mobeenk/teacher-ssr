@@ -1,0 +1,99 @@
+<div class="row">
+  <div class="col-8">
+    <tabset dir="rtl" class="member-tabset text-right" #memberTabs>
+      <tab
+        heading="About {{ member.knownAs }}"
+        (selectTab)="onTabActivated($event)"
+        style="float: right"
+      >
+        <h4>معلومات عني</h4>
+        <p>{{member.introduction}}</p>
+        <h4  *ngIf="member.gender != 'طالب' && member.gender !='طالبة'" >
+          المواد التي أدرسها</h4>
+        <p>{{member.lookingFor}}</p>
+      </tab>
+
+       <tab heading='مهارات إضافية' (selectTab)="onTabActivated($event)">
+            <h4>معلومات إضافية</h4>
+            <p>{{member.interests}}</p>
+        </tab>
+      <!-- <tab heading='Photos' (selectTab)="onTabActivated($event)">
+            <ngx-gallery [options]="galleryOptions" [images]="galleryImages" 
+                style="display: inline-block; margin-bottom: 20px;"></ngx-gallery>
+        </tab>
+        <tab heading='Messages' (selectTab)="onTabActivated($event)">
+            <app-member-messages [username]="member.username"></app-member-messages>
+        </tab>  -->
+    </tabset>
+
+    <!-- profile on right -->
+  </div>
+  <div class="col-4">
+    <div class="card">
+      <img *ngIf="member.gender== 'معلم'" src="{{ member.photoUrl || './assets/user.png' }}" alt="{{ member.knownAs }}" class="card-img-top img-thumbnail"/>
+      <img *ngIf="member.gender== 'معلمة'" src="{{ member.photoUrl || './assets/femaleUser.png' }}" alt="{{ member.knownAs }}" class="card-img-top img-thumbnail"/>
+
+      <div class="card-body text-right">
+        <div
+          class="mb-2"
+          *ngIf="(presence.onlineUsers$ | async).includes(member.username)"
+        >
+          <i class="fa fa-user-circle text-success"></i> Online now
+        </div>
+        <div>
+          <strong>مكان الإقامة</strong>
+          <p>{{ member.country }} - {{ member.city }} </p>
+        </div>
+        <div>
+          <strong>التخصص</strong>
+          <p>{{ member.major }}</p>
+        </div>
+        <div>
+          <strong>الجنسية</strong>
+          <p>{{ member.nationality }}</p>
+        </div>
+        <div>
+          <strong>واتساب أو اتصال</strong>
+          <p>{{ isPressed == true ? member.phoneNumber : "************" }}</p>
+          <div
+            class="img__description"
+            *ngIf="isPressed"
+            style="margin-bottom: 20px"
+          >
+            <a
+              href="http://api.whatsapp.com/send?phone={{ member.phoneNumber }}"
+              target="_blank"
+            >
+              <img
+                src="./assets/icons8-whatsapp.gif"
+                width="50"
+                height="50"
+                title="إرسال عبر واتساب"
+              />
+            </a>
+          </div>
+        </div>
+        <div>
+          <strong>آخر ظهور</strong>
+          <p>{{ member.lastActive | timeago }}</p>
+        </div>
+        <div>
+          <strong>عضو منذ</strong>
+          <p>{{ member.created | date: "dd MMM yyyy" }}</p>
+        </div>
+        <!-- <div>
+                    <strong>Email:</strong>
+                    <p>{{member.email}}</p>
+                </div> -->
+      </div>
+      <div class="card-footer">
+        <div class="btn-group d-flex">
+          <!-- <button class="btn btn-primary">Like</button> -->
+          <button class="btn btn-success" (click)="revealNumber()">
+            إظهار الرقم
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

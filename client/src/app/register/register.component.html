@@ -1,0 +1,142 @@
+<form
+  [formGroup]="registerForm"
+  (ngSubmit)="registerForm.valid && register()"
+  autocomplete="off"
+>
+  <h2 class="text-center text-primary">مستخدم جديد</h2>
+  <hr />
+
+  <div class="form-group text-right">
+    <label class="control-label ml-2" style="margin-right: 10px">أنا</label>
+    <br />
+    <label class="radio-inline">
+      <input 
+      type="radio" 
+      value="معلم" 
+      formControlName="gender" /> معلم
+    </label>
+    <label class="radio-inline">
+      <input
+        type="radio"
+        value="معلمة"
+        formControlName="gender"
+        class="ml-3"
+      />
+      معلمة
+    </label>
+  </div>
+  <!-- REAL NAME -->
+  <app-text-input
+    [formControl]="registerForm.controls['username']"
+    [label]="'اسم المستخدم'"
+    [class]="'text-right'"
+  ></app-text-input>
+  <!-- NickName -->
+  <app-text-input
+    [formControl]="registerForm.controls['knownAs']"
+    [label]="'الإسم المستعار'"
+    [class]="'text-right'"
+  ></app-text-input>
+  <!--BIRTH DAY-  -->
+  <app-date-input
+    [formControl]="registerForm.controls['dateOfBirth']"
+    [label]="'تاريخ الميلاد'"
+    [maxDate]="maxDate"
+  ></app-date-input>
+  <!-- MAJOR -->
+  <select
+    class="form-control mb-3"
+    [formControl]="registerForm.controls['major']"
+    dir="rtl"
+  >
+    <option value="" disabled selected>إختر التخصص</option>
+    <option *ngFor="let major of majors">{{ major }}</option>
+  </select>
+
+  <!-- Nationality -->
+
+  <select
+    class="form-control mb-3"
+    [formControl]="registerForm.controls['nationality']"
+    dir="rtl"
+    required
+  >
+    <option value="" disabled selected>إختر الجنسية</option>
+    <option *ngFor="let count of countryList">{{ count.name }}</option>
+  </select>
+
+  <!-- Residency Country -->
+  <select
+    class="form-control mb-3"
+    [formControl]="registerForm.controls['country']"
+    dir="rtl"
+    (change)="changeCountry($event.target.value)"
+    matNativeControl
+    required
+  >
+    <option value="" disabled selected>إختر الدولة</option>
+    <option *ngFor="let count of countryList">{{ count.name }}</option>
+  </select>
+
+  <!--  CITY -->
+  <select
+    class="form-control mb-3"
+    [formControl]="registerForm.controls['city']"
+    dir="rtl"
+  >
+    <option value="" disabled selected>إختر المدينة</option>
+    <option *ngFor="let city of cities">{{ city }}</option>
+  </select>
+  <!-- mail -->
+  <app-text-input
+    [formControl]="registerForm.controls['email']"
+    [label]="'البريد الإلكتروني'"
+    [class]="'text-right'"
+  ></app-text-input>
+
+  <!-- phone -->
+  <app-text-input
+    [formControl]="registerForm.controls['phoneNumber']"
+    [label]="'رقم الجوال أو الواتساب'"
+    [class]="'text-right'"
+  ></app-text-input>
+  <!-- PASSWORD -->
+  <app-text-input
+    [formControl]="registerForm.controls['password']"
+    [label]="'كلمة المرور'"
+    [type]="'password'"
+    [class]="'text-right'"
+  >
+  </app-text-input>
+  <!-- CONFIRM PASSWORD -->
+  <app-text-input
+    [formControl]="registerForm.controls['confirmPassword']"
+    [label]="'تأكيد كلمة المرور'"
+    [type]="'password'"
+    [class]="'text-right'"
+  ></app-text-input>
+<strong>
+  <p class="text-right text-danger">أتعهد وأقسم بالله بسداد عمولة الموقع وهي 5% من أي ايرادات مباشرة او غير مباشرة عن طريق الموقع وهي في ذمتي</p>
+</strong>  
+  <!-- ERROR SUMMARY -->
+  <div class="row" *ngIf="validationErrors.length > 0">
+    <ul class="text-danger">
+      <li *ngFor="let error of validationErrors">
+        {{ error }}
+      </li>
+    </ul>
+  </div>
+
+  <div class="form-group text-center">
+    <button
+      [disabled]="!registerForm.valid"
+      class="btn btn-success mr-2"
+      type="submit"
+    >
+      التسجيل
+    </button>
+    <button class="btn btn-default mr-2" (click)="cancel()" type="button">
+      إلغاء
+    </button>
+  </div>
+</form>

@@ -1,0 +1,33 @@
+
+
+
+<div class="container mt-5">
+    <div *ngIf="!registerMode && !registerStudentMode" style='text-align: center;'>
+        <h1>منصة المدرسين والطلاب</h1>
+        <p class="lead">بادر الآن وابحث عن مدرسك الخصوصي المناسب في منطفتك ... سجل للتواصل مع المدرسين أو بإمكانك تصفح ملفات المعلمين بدون تسجيل</p>
+        <div class="text-center">
+            <button (click)="registerToggle()" class="btn btn-primary btn-lg mr-2">التسجيل كمعلم</button>
+            <button (click)="registerStudentToggle()" class="btn btn-info btn-lg">التسجيل كطالب</button>
+        </div>
+    </div>
+<!-- TEACHER -->
+    <div *ngIf="registerMode" class="container">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <app-register (cancelRegister)="cancelRegisterMode($event)" ></app-register>
+            </div>
+        </div>
+    </div>
+<!-- STUDENT -->
+    <div *ngIf="registerStudentMode" class="container">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <app-register-student (cancelRegisterStudent)="cancelRegisterMode($event)"></app-register-student>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+

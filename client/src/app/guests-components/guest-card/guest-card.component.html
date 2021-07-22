@@ -1,0 +1,92 @@
+<!-- PROFILE -->
+
+<div class="card mb-4" style="width: 11.2em">
+  <div class="card-img-wrapper">
+    <img
+      *ngIf="member.gender == 'معلم'"
+      src="{{ member.photoUrl || './assets/user.png' }}"
+      alt="{{ member.knownAs }}"
+      class="card-img-top image"
+    />
+    <img
+      *ngIf="member.gender == 'معلمة'"
+      src="{{ member.photoUrl || './assets/femaleUser.png' }}"
+      alt="{{ member.knownAs }}"
+      class="card-img-top image"
+    />
+    <!-- <img src="{{member.photoUrl || './assets/user.png'}}" alt="{{member.knownAs}}" class="card-img-top image"> -->
+    <img
+      style="position: absolute; top: 2px; right: 2px"
+      alt="country"
+      src="./assets/svg-country-flags/png100px/{{ member.country }}.png"
+      width="30px"
+      height="20px"
+      title=" الإقامة: {{ member.country }} - {{ member.city }}"
+    />
+    <img
+      *ngIf="member.isVerified && !verifiedDateIsExpired()"
+      style="position: absolute; bottom: 0px; right: 2px"
+      src="./assets/verified-account.png"
+      width="30px"
+      height="30px"
+      alt="verified"
+      title="موثق"
+    />
+
+    <img
+      *ngIf="member.balance > 0"
+      style="position: absolute; bottom: 2px; left: 2px"
+      src="./assets/star.png"
+      width="25px"
+      height="25px"
+      alt="starred"
+      title="member.balance"
+    />
+
+    <!-- title="سدد عمولة الموقع"/> -->
+
+    <div style="position: absolute; top: 2px; left: 2px">
+      <span title="معلم"
+        ><i *ngIf="member.gender == 'معلم'" class="fa fa-mars"></i
+      ></span>
+      <span title="معلمة"
+        ><i *ngIf="member.gender == 'معلمة'" class="fa fa-venus"></i
+      ></span>
+    </div>
+
+    <ul class="list-inline member-icons animate text-center">
+      <li class="list-inline-item">
+        <button
+          routerLink="/guests/{{ member.username }}"
+          class="btn btn-primary"
+        >
+          تواصل معه
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- BOTTOM -->
+  <div class="card-body p-1">
+    <h6 class="card-title text-center mb-1">
+      <span
+        [class.is-online]="
+          (presence.onlineUsers$ | async).includes(member.username)
+        "
+      >
+        <i class="fa fa-user mr-2"></i>
+      </span>
+      {{ member.knownAs }}
+      <!-- , {{member.major}} -->
+      <!-- <img class="i" src="./assets/svg-country-flags/png100px/{{member.country}}.png" width="30px" height="20px"/> -->
+    </h6>
+    <div class="text-muted text-center">{{ member.major }} <br /></div>
+    <div class="text-right" style="font-size: 12px; font-style: normal">
+      {{
+        member.interests == null
+          ? member.interests
+          : (member.lookingFor | shorten)
+      }}
+    </div>
+  </div>
+</div>

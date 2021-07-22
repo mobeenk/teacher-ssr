@@ -1,0 +1,52 @@
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System.Linq;
+using API.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
+namespace API.Data
+{
+    public class Seed
+    {
+        public static async Task SeedUsers(UserManager<AppUser> userManager, 
+            RoleManager<AppRole> roleManager)
+        {
+            if (await userManager.Users.AnyAsync()) return;
+
+            var userData = await System.IO.File.ReadAllTextAsync("Data/UserSeedData.json");
+            var users = JsonSerializer.Deserialize<List<AppUser>>(userData);
+            if (users == null)
+                 return;
+        // Adding roles to users
+            var roles = new List<AppRole>
+            {
+                new AppRole{Name = "Member"},
+                new AppRole{Name = "Admin"},
+                new AppRole{Name = "Moderator"},
+            };
+
+            foreach (var role in roles)
+            {// create role using microsoft identity
+                await roleManager.CreateAsync(role);
+            }
+            
+            foreach (var user in users)
+            {
+                user.Photos.First().IsApproved = true;
+                user.UserName = user.UserName.ToLower();
+                await userManager.CreateAsync(user, "SecretPa$$w0rd!");
+                await userManager.AddToRoleAsync(user, "Member");
+            }
+            // creating the admin
+            var admin = new AppUser
+            {
+                UserName = "admin"
+            };
+
+            await userManager.CreateAsync(admin, "SecretPa$$w0rd!");
+            await userManager.AddToRolesAsync(admin, new[] {"Admin", "Moderator"});
+        }
+    }
+}

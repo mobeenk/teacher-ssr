@@ -1,0 +1,55 @@
+
+
+<div   *ngIf="!submitted"> 
+
+  <form 
+  [formGroup]="emailReset"
+  (ngSubmit)="emailReset.valid && forgotPasswordMailreset()"
+  autocomplete="off"
+>
+  <h2 class="text-center text-primary"> أدخل البريد الالكتروني لإعادة الضبط </h2>
+
+<div class="row justify-content-center">
+  <div class="col-sm-6">
+    <hr />
+    <app-text-input 
+    [formControl]="emailReset.controls['email']"
+    [label]="'example@test.com'"
+    [type]="'text'"
+    [class]= "'text-center'"
+  >
+  </app-text-input>
+  </div>
+
+</div>
+
+ 
+
+  <div class="form-group text-center">
+    <button
+      
+      [disabled]="!emailReset.valid"
+      class="btn btn-success mr-2"
+      type="submit"
+
+    >
+      إرسال
+    </button>
+    <button class="btn btn-default mr-2" (click)="cancel()" type="button">إلفاء</button>
+  </div>
+</form>
+</div>
+
+
+  <div class="row" *ngIf="submitted">
+    <div class="col-md-12">
+      <h2 class="text-right">
+        تم إرسال بيانات ضبط كلمة المرور على البريد الإلكتروني
+      </h2>
+      <div class="text-right">
+        <button class="btn btn-primary mr-2" (click)="cancel()" type="button">العودة للصفحة الرئيسية</button>
+      </div>
+
+    </div>
+  
+  </div>

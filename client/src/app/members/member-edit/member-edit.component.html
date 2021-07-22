@@ -1,0 +1,210 @@
+<div class="col-12 text-right" dir="rtl">
+  <h1>ملفي الشخصي</h1>
+</div>
+<div class="row" *ngIf="member">
+  <div class="col-12">
+    <div class="alert alert-info text-right" *ngIf="editForm.dirty">
+      <strong>تحذير: </strong> لغد قمت بتعديل بعض البيانات, الرجاء التأكد قبل
+      الحفظ
+    </div>
+  </div>
+
+  <div dir="rtl" class="col-8">
+    <tabset class="member-tabset text-right">
+      <tab heading="معلومات {{ member.knownAs }}">
+        <form #editForm="ngForm" id="editForm" (ngSubmit)="updateMember()">
+          <h4 class="mt-2">تعديل البيانات الشخصية</h4>
+          <div class="form-group row">
+            <!-- <div class="form-group col-md-4">
+                            <label for="city">الدولة: </label>
+                            <input [(ngModel)]="member.country" type="text" name="country" class="form-control mx-2">
+                        </div>
+ -->
+            <!-- -->
+            <div class="form-group col-md-3">
+              <label for="country">الدولة </label>
+              <select
+                class="form-control"
+                [(ngModel)]="member.country"
+                dir="rtl"
+                name="country"
+                (change)="changeCountry($event.target.value)"
+              >
+                <option value="" disabled selected>دولة الإقامة</option>
+                <option *ngFor="let count of countryList">
+                  {{ count.name }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="city">المدينة </label>
+              <select
+                class="form-control"
+                [(ngModel)]="member.city"
+                dir="rtl"
+                name="city"
+              >
+                <option value="" disabled selected>إختر الدولة أولاً</option>
+                <option *ngFor="let city of cities" value="{{ city }}">
+                  {{ city }}
+                </option>
+              </select>
+            </div>
+
+            <!-- الجنسية -->
+
+            <div class="form-group col-md-3">
+              <label for="nationality">الجنسية </label>
+              <input
+                [(ngModel)]="member.nationality"
+                type="text"
+                name="nationality"
+                class="form-control mx-2"
+              />
+            </div>
+
+            <!-- MAJOR -->
+            <div *ngIf="member.gender != 'طالب' && member.gender !='طالبة'" class="form-group col-md-3">
+              <label for="major">التخصص </label>
+            <select
+              class="form-control"
+              [(ngModel)]="member.major"
+              dir="rtl"
+              name="major"
+            >
+              <option value="" disabled selected>إختر التخصص</option>
+              <option *ngFor="let major of majors"  value="{{ major }}">{{ major }}</option>
+            </select>
+          </div>
+
+          </div>
+
+          <div class="form-group row">
+            <!-- البريد الاكلتروني -->
+            <div class="form-group col-md-5">
+              <label class="form-check-label" for="email"
+                >البريد الإلكتروني:
+              </label>
+              <input
+                [(ngModel)]="member.email"
+                type="text"
+                name="email"
+                class="form-control mt-2"
+              />
+            </div>
+<!-- رقم التواصل -->
+            <div class="form-group col-md-4">
+              <label class="form-check-label" for="phoneNumber">
+                رقم التواصل
+              </label>
+              <input
+                [(ngModel)]="member.phoneNumber"
+                type="text"
+                name="phoneNumber"
+                class="form-control mt-2"
+              />
+            </div>
+
+<!-- suspend account goes here -->
+            <!-- accountStatus -->
+            <div *ngIf="member.gender != 'طالب' && member.gender !='طالبة'" class="form-group col-md-3">
+              <label class="text-danger" for="major"> حالة الحساب </label>
+            <select
+              class="form-control"
+              [(ngModel)]="member.accountStatus"
+              dir="rtl"
+              name="accountStatus"
+            >
+              <option value="" disabled selected>إختر </option>
+              <option *ngFor="let opt of suspendOptions"  [ngValue]="opt.key">{{opt.value }}</option>
+            </select>
+          </div>
+
+          </div>
+
+          <h4>معلومات عني</h4>
+          <textarea
+            class="form-control"
+            [(ngModel)]="member.introduction"
+            name="introduction"
+            rows="6"
+          ></textarea>
+
+          <div *ngIf="member.gender != 'طالب' && member.gender !='طالبة'" >
+            <h4 class="mt-2" >
+              المواد التي أدرسها</h4>
+            <textarea
+              class="form-control"
+              [(ngModel)]="member.lookingFor"
+              name="lookingFor"
+              rows="6"
+            ></textarea>
+          </div>
+   <div *ngIf="member.gender != 'طالب' && member.gender !='طالبة'">
+    <h4 class="mt-2">بيانات إضافية</h4>
+    <textarea
+      class="form-control"
+      [(ngModel)]="member.interests"
+      name="interests"
+      rows="6"
+    ></textarea>
+   </div>
+ 
+        </form>
+      </tab>
+      <tab heading="إضافة الصور الشخصية والشهادات">
+        <app-photo-editor [member]="member"></app-photo-editor>
+      </tab>
+    </tabset>
+  </div>
+  <div class="col-4 text-right">
+    <div class="card">
+      <img *ngIf="member.gender == 'معلم'  || member.gender =='طالب'" src="{{ member.photoUrl || './assets/user.png' }}" alt="{{ member.knownAs }}" class="card-img-top img-thumbnail"/>
+      <img *ngIf="member.gender == 'معلمة' || member.gender =='طالبة'" src="{{ member.photoUrl || './assets/femaleUser.png' }}" alt="{{ member.knownAs }}" class="card-img-top img-thumbnail"/>
+
+      <div class="card-body">
+        <div>
+          <strong>الإقامة</strong>
+          <p>{{ member.city }} - {{ member.country }}</p>
+        </div>
+        <div>
+          <strong>العمر</strong>
+          <p>{{ member.age }}</p>
+        </div>
+
+        <div *ngIf="member.gender != 'طالب' && member.gender !='طالبة'">
+          <strong>التخصص</strong>
+          <p>{{ member.major }}</p>
+        </div>
+
+        <div>
+          <strong>رقم الهاتف</strong>
+          <p>{{ member.phoneNumber }}</p>
+        </div>
+        <div>
+          <strong>الجنسية</strong>
+          <p>{{ member.nationality }}</p>
+        </div>
+        <!-- <div>
+          <strong>Last Active:</strong>
+          <p>{{ member.lastActive | timeago }}</p>
+        </div> -->
+        <div>
+          <strong>عضو من منذ</strong>
+          <p>{{ member.created | date: "dd MMM yyyy" }}</p>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button
+          [disabled]="!editForm.dirty"
+          form="editForm"
+          type="submit"
+          class="btn btn-success btn-block"
+        >
+          حفظ التغييرات
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

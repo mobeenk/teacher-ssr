@@ -1,0 +1,121 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
+  <div class="container">
+    <!-- if user logged in -->
+    <div
+      class="dropdown"
+      *ngIf="accountService.currentUser$ | async as user"
+      dropdown
+    >
+      <img *ngIf="user.gender == 'معلم '" src="{{ user.photoUrl || './assets/user.png' }}" alt="{{ user.username }}" />
+      <img *ngIf="user.gender == 'معلمة'" src="{{ user.photoUrl || './assets/femaleUser.png' }}" alt="{{ user.username }}" />
+
+      <a class="dropdown-toggle text-light ml-2" dropdownToggle
+        >مرحباً {{ user.knownAs || user.username | titlecase }}</a
+      >
+      <div class="dropdown-menu mt-3" *dropdownMenu>
+        <a routerLink="/member/edit" class="dropdown-item"
+          >تعديل الملف الشخصي</a
+        >
+        <a routerLink="/messages" class="dropdown-item">الرسائل</a>
+        <a 
+       
+        routerLink="/change-password" class="dropdown-item"
+          >تغيير كلمة المرور</a
+        >
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" (click)="logout()">خروج</a>
+      </div>
+    </div>
+    <!-- end -->
+
+    <!-- login bar -->
+    <form
+      *ngIf="(accountService.currentUser$ | async) === null"
+      #loginForm="ngForm"
+      class="form-inline mt-2 mt-md-0"
+      (ngSubmit)="login()"
+      autocomplete="off"
+    >
+      <a
+      tabindex="1"
+        routerLink="/reset-emailpassword"
+        class="btn btn-link btn-sm text-white"
+        type=""
+        >نسيت كملة المرور</a
+      >
+
+      <button
+      [disabled]="!loginForm.dirty"
+      tabindex="3"
+      class="btn btn-success my-2 mr-2 my-sm-0" type="submit">
+        دخول
+      </button>
+      <input
+        tabindex="30"
+        name="password"
+        [(ngModel)]="model.password"
+        required
+        class="form-control mr-sm-2 text-right"
+        type="password"
+        placeholder="كلمة المرور"
+      />
+      <input
+      required
+        tabindex="20"
+        name="username"
+        [(ngModel)]="model.username"
+        class="form-control mr-sm-2 text-right"
+        type="text"
+        placeholder="اسم المستحدم"
+      />
+    </form>
+    <!-- end -->
+
+    <!-- the bar when logged in -->
+    <ul class="navbar-nav ml-auto" style="margin-right: 10px">
+      <ng-container *ngIf="accountService.currentUser$ | async">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/contactus" routerLinkActive="active"
+            >اتصل معنا</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/members" routerLinkActive="active"
+            >المدرسين</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/lists" routerLinkActive="active"
+            >المفضلين</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/messages" routerLinkActive="active"
+            >الرسائل</a
+          >
+        </li>
+        <li *appHasRole="['Admin', 'Moderator']" class="nav-item">
+          <a class="nav-link" routerLink="/admin" routerLinkActive="active"
+            >لوحة المدير</a
+          >
+        </li>
+      </ng-container>
+      <!-- <li class="nav-item">
+                <a class="nav-link" routerLink='/errors'routerLinkActive='active' >الأخطاء</a>
+            </li> -->
+            <li  *ngIf="(accountService.currentUser$ | async) === null" class="nav-item">
+              <a class="nav-link" routerLink="/contactus" routerLinkActive="active"
+                >اتصل معنا</a
+              >
+            </li>
+            <li  *ngIf="(accountService.currentUser$ | async) === null" class="nav-item">
+              <a class="nav-link" routerLink='/guests'routerLinkActive='active' >المدرسين</a>
+          </li>
+       
+
+    </ul>
+    <a tabindex="-7" class="navbar-brand" routerLink="/" routerLinkActive="active"
+      >مدرسي الخصوصي</a
+    >
+  </div>
+</nav>

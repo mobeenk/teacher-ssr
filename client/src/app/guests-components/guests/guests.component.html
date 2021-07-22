@@ -1,0 +1,166 @@
+<div class="text-center mt-3">
+  <h1>نتائج البحث - {{ pagination?.totalItems }} تم العثور عليه</h1>
+  <h2 class="text-right" *ngIf="guestParams.country != 'الكل'">
+   مدرس خصوصي في / {{guestParams.country}} /  {{guestParams.city}} / {{guestParams.major}}
+  </h2>
+</div>
+
+<div class="container mt-3" dir="rtl">
+  <form
+    #form="ngForm"
+    class="form-group mb-3"
+    (ngSubmit)="loadMembers()"
+    autocomplete="off"
+  >
+    <!--       -->
+    <div class="form-row text-right">
+      <div class="form-group px-2 col-md-3">
+        <label>بلد الإقامة</label>
+        <select
+          name="country"
+          [(ngModel)]="guestParams.country"
+          class="form-control ml-1"
+          (change)="changeCountry($event.target.value)"
+        >
+          <option *ngFor="let country of countryList" [value]="country.name">
+            {{ country.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group px-2 col-md-3">
+        <label>المدينة</label>
+        <select
+          name="city"
+          [(ngModel)]="guestParams.city"
+          class="form-control ml-1"
+        >
+          <option *ngFor="let city of cities" [value]="city">
+            {{ city }}
+          </option>
+        </select>
+      </div>
+
+      <!-- GENDER -->
+      <div class="form-group px-1 col-md-3">
+        <label>النوع</label>
+        <select
+          name="gender"
+          [(ngModel)]="guestParams.gender"
+          class="form-control ml-1"
+        >
+          <option *ngFor="let gender of genderList" [value]="gender.value">
+            {{ gender.display }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group px-2 col-md-3">
+        <label>التخصص</label>
+        <select
+          name="major"
+          [(ngModel)]="guestParams.major"
+          class="form-control ml-1"
+        >
+          <option *ngFor="let major of majors" [value]="major">
+            {{ major }}
+          </option>
+        </select>
+      </div>
+   
+      <!--
+   <div class="form-group">
+      <label>Age from: </label>
+      <input
+        type="number"
+        class="form-control ml-1"
+        style="width: 70px"
+        name="minAge"
+        [(ngModel)]="guestParams.minAge"
+      />
+    </div>
+
+    <div class="form-group px-2">
+      <label>Age to: </label>
+      <input
+        type="number"
+        class="form-control ml-1"
+        style="width: 70px"
+        name="maxAge"
+        [(ngModel)]="guestParams.maxAge"
+      />
+    </div> 
+
+
+  -->
+</div>
+
+    <div class="row">
+      <button class="btn btn-primary ml-1" type="submit">بحث</button>
+      <button (click)="resetFilters()" class="btn btn-info ml-1" type="submit">
+        إلغاء الغلاتر
+      </button>
+      <div class="col">
+        <div class="btn-group float-left">
+          <button
+            type="button"
+            class="btn btn-primary"
+            name="orderBy"
+            (click)="loadMembers()"
+            btnRadio="created"
+            [(ngModel)]="guestParams.orderBy"
+          >
+            المنضمين حديثاً
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-primary"
+            name="orderBy"
+            (click)="loadMembers()"
+            btnRadio="lastActive"
+            [(ngModel)]="guestParams.orderBy"
+          >
+            آخر ظهور
+          </button>
+        </div>
+      </div>
+    </div>
+    
+  </form>
+</div>
+
+<div class="row">
+  <div *ngFor="let member of members" class="col-2">
+    <app-guest-card [member]="member"></app-guest-card>
+  </div>
+</div>
+
+<div class="d-flex justify-content-center" *ngIf="pagination">
+  <!-- ANGULAR PAGINATIOn -->
+  <pagination
+    [boundaryLinks]="true"
+    [totalItems]="pagination.totalItems"
+    [itemsPerPage]="pagination.itemsPerPage"
+    [(ngModel)]="pagination.currentPage"
+    (pageChanged)="pageChanged($event)"
+    previousText="&lsaquo;"
+    nextText="&rsaquo;"
+    firstText="&laquo;"
+    lastText="&raquo;"
+  >
+  </pagination>
+
+  <!-- PAGE SIZE SELECTOR -->
+  <select
+    name="pageSize"
+    style="width: 75px"
+    [(ngModel)]="guestParams.pageSize"
+    class="form-control ml-2"
+    (change)="loadMembers()"
+  >
+    <option *ngFor="let pageSize of pageSizeList" [value]="pageSize.value">
+      {{ pageSize.display }}
+    </option>
+  </select>
+</div>
