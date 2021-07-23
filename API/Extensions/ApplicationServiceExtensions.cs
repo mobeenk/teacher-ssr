@@ -57,7 +57,7 @@ namespace API.Extensions
                     var pgHost = pgHostPort.Split(":")[0];
                     var pgPort = pgHostPort.Split(":")[1];
 
-                  connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};SSL Mode=Require;TrustServerCertificate=True";
+                  connStr = $"postgres://vsneqgszdohmrm:967676b859f540e37789ce23bf63fc18728c67a3416c55e161e9fa9c3ee49107@ec2-176-34-105-15.eu-west-1.compute.amazonaws.com:5432/d3lf86ti0ndoga";
                 }
 
                 // Whether the connection string came from the local development configuration file
